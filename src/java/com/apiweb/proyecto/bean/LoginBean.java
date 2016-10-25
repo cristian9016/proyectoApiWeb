@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.http.HttpSession;
 
 
 @Named(value = "loginBean")
@@ -24,7 +25,8 @@ public class LoginBean implements Serializable {
         try{
             Usuarios u = em.createNamedQuery("Usuarios.login", Usuarios.class).setParameter("username", usuario).setParameter("pass", pass).getSingleResult();
         if(u!=null){
-            String type = u.getType();
+            HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            session.setAttribute("LOGGED", true);
             return "welcome?faces-redirect=true";
         }else{
             FacesContext context = FacesContext.getCurrentInstance(); 
@@ -39,6 +41,12 @@ public class LoginBean implements Serializable {
         
     }
 
+    public String logout(){
+            HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            session.invalidate();
+            return "index?faces-redirect=true";
+    }
+    
     public String getUsuario() {
         return usuario;
     }

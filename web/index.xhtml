@@ -16,10 +16,10 @@
                 <h:outputText value="Password"/>
                 <p:password value="#{loginBean.pass}"/>
             </p:panelGrid>
-            <p:commandButton value="Ingresar" action="#{loginBean.login()}" update="growl"/>
+            <p:commandButton value="Ingresar" action="#{loginBean.login()}" update="growl" style="width: 125px;height: 30px;" id="login"/>
         </h:form>
         <h:form>
-            <p:commandButton value="Registrarse" onclick="PF('register').show()" />
+            <p:commandButton value="Registrarse" onclick="PF('register').show()" style="width: 125px; height: 30px;"/>
         </h:form>
         
         <h:form>

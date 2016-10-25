@@ -25,7 +25,7 @@ public class MindMap implements Serializable{
         root.addNode(ips);
         root.addNode(ns);
         root.addNode(malware);
-        ips.addNode(nuevo);
+       
     }
  
     public MindmapNode getRoot() {

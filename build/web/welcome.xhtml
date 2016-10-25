@@ -16,42 +16,74 @@
         <h:body>
 
             <p:layout fullPage="true">
-
-                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                    Header
+                <p:layoutUnit position="north" size="40" id="cabecera">
+                    <h:outputText value="Welcome to ApiWeb's Project" style="position: absolute;margin-left: 40%"/>
+                    
+                    <h:form>
+                         <h:commandLink value="Cerrar Session" action="#{loginBean.logout()}" style="position: absolute;margin-left: 90%"/>
+                    </h:form>
                 </p:layoutUnit>
-
-                <p:layoutUnit position="west" size="175" header="Left" collapsible="true">
-                    <p:menu>
-                        <p:submenu label="Resources">
-                            <p:menuitem value="Demo" url="http://www.primefaces.org/showcase-labs/ui/home.jsf" />
-                            <p:menuitem value="Documentation" url="http://www.primefaces.org/documentation.html" />
-                            <p:menuitem value="Forum" url="http://forum.primefaces.org/" />
-                            <p:menuitem value="Themes" url="http://www.primefaces.org/themes.html" />
+                <p:layoutUnit position="west" size="180" header="Menu" collapsible="true">
+                    <h:form>
+                        <p:menu toggleable="true" >
+                            <p:submenu label="Opciones">
+                            <p:menuitem value="Agregar" onclick="PF('create').show()"/>
+                            <p:menuitem value="Eliminar"/>
+                            <p:menuitem value="Editar" onclick="PF('edit').show()"/>
                         </p:submenu>
+                        
                     </p:menu>
+                    </h:form>
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
                     <h:form>
-                        <p:mindmap value="#{mindMap.root}" style="width: 100%;height: 600px;border: 1px solid black;">
-                            <p:ajax event="select" listener="#{mindMap.onNodeSelect}" />
-                            <p:ajax event="dblselect" listener="#{mindMap.onNodeDblselect}" oncomplete="PF('details').show();" />
-                        </p:mindmap>
-
-                        <p:dialog widgetVar="details" header="Node Details" resizable="false" modal="true">
-                            <p:panelGrid  columns="2">
-                                <h:outputText value="Usuario"/>
-                                
-                                <h:outputText value="Password"/>
-                                
-                            </p:panelGrid>
-                        </p:dialog> 
-                    </h:form>
+                    <p:mindmap value="#{welcomeBean.model}" style="width: 100%;height: 600px;border: 1px solid black;">
+                        <p:ajax event="select" listener="#{welcomeBean.onNodeSelect}" />
+                    </p:mindmap>
+                </h:form>
                 </p:layoutUnit>
-
+                
             </p:layout>
+            <h:form>
+            <p:dialog header="Create New Device" widgetVar="create" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+                        <h:outputText value="Type"/>
+                        <p:selectOneListbox value="#{controlBean.device.type}" >
+                            <f:selectItem itemLabel="Router" itemValue="1"/>
+                            <f:selectItem itemLabel="Switch" itemValue="2"/>
+                            <f:selectItem itemLabel="Firewall" itemValue="3"/>
+                            <f:selectItem itemLabel="Load Balancer" itemValue="4"/>
+                            <f:selectItem itemLabel="Server" itemValue="5"/>
+                        </p:selectOneListbox>
+                        <h:outputText value="Ip"/>
+                        <p:inputText value="#{controlBean.device.ip}"/>
+                        <h:outputText value="Location"/>
+                        <p:inputText value="#{controlBean.device.location}"/>
+                        <h:outputText value="Connection"/>
+                        <p:inputText value="#{controlBean.device.conn}" type="number" required="true"/>
+                    </p:panelGrid>
+                <p:commandButton value="Guardar" oncomplete="PF('create').hide()" actionListener="#{controlBean.create()}" onclick="welcome?faces-redirect=true"/>
+            </p:dialog>
+                
+        </h:form>
+            <style type="text/css">
+                .ui-diagram-element {   
+                    width:5em; 
+                    height:5em;
+                    line-height:5em;
+                    text-align: center;
+                    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
+                    border-radius: 5em;
+                    border: 1px solid #404a4e;
+                    background-color: #404a4e;
+                    color: #cccccc;
+                }
 
+                .ui-diagram-element:hover {
+                    background-color: #20282b;
+                }
+            </style>
         </h:body>
 
     </f:view>
