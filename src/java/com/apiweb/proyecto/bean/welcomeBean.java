@@ -20,7 +20,7 @@ public class welcomeBean implements Serializable{
 
     private MindmapNode model = new DefaultMindmapNode("Network","Network","FFCC00",true);;
     private List<Device> device = new ArrayList();
-    
+    private MindmapNode selectedNode;
     
     @PostConstruct
     public void init() { 
@@ -116,6 +116,17 @@ public class welcomeBean implements Serializable{
         this.device = device;
     }
 
+    public MindmapNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void setSelectedNode(MindmapNode selectedNode) {
+        this.selectedNode = selectedNode;
+    }
+    
+    public void onNodeDblselect(SelectEvent event) {
+        this.selectedNode = (MindmapNode) event.getObject();        
+    }
 }
   
     

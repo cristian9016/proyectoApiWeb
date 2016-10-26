@@ -28,8 +28,9 @@
                         <p:menu toggleable="true" >
                             <p:submenu label="Opciones">
                             <p:menuitem value="Agregar" onclick="PF('create').show()"/>
-                            <p:menuitem value="Eliminar"/>
+                            <p:menuitem value="Eliminar" onclick="PF('delete').show()"/>
                             <p:menuitem value="Editar" onclick="PF('edit').show()"/>
+                            <p:menuitem value="Mapas" onclick="maps?faces-redirect=true" />
                         </p:submenu>
                         
                     </p:menu>
@@ -40,7 +41,11 @@
                     <h:form>
                     <p:mindmap value="#{welcomeBean.model}" style="width: 100%;height: 600px;border: 1px solid black;">
                         <p:ajax event="select" listener="#{welcomeBean.onNodeSelect}" />
+                        <p:ajax event="dblselect" listener="#{welcomeBean.onNodeDblselect}" update="output" oncomplete="PF('options').show();" />
                     </p:mindmap>
+                <p:dialog widgetVar="options" header="Options" resizable="false" modal="true" showEffect="fade" hideEffect="fade">
+                    <h:outputText id="output" value="#{welcomeBean.selectedNode.data}" />
+                </p:dialog> 
                 </h:form>
                 </p:layoutUnit>
                 
@@ -61,12 +66,34 @@
                         <h:outputText value="Location"/>
                         <p:inputText value="#{controlBean.device.location}"/>
                         <h:outputText value="Connection"/>
-                        <p:inputText value="#{controlBean.device.conn}" type="number" required="true"/>
+                        <p:inputText value="#{controlBean.device.conn}" type="number"/>
                     </p:panelGrid>
                 <p:commandButton value="Guardar" oncomplete="PF('create').hide()" actionListener="#{controlBean.create()}" onclick="welcome?faces-redirect=true"/>
             </p:dialog>
                 
         </h:form>
+            <h:form>
+            <p:dialog header="Delete Device" widgetVar="delete" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+                        <h:outputText value="Id"/>
+                        <p:inputText value="#{controlBean.delete}"/>
+                    </p:panelGrid>
+                <p:commandButton value="Delete" oncomplete="PF('delete').hide()" actionListener="#{controlBean.delete()}" onclick="welcome?faces-redirect=true"/>
+            </p:dialog>        
+        </h:form>
+            <p:dialog header="Edit Device" widgetVar="edit" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+                        <h:outputText value="Id"/>
+                        <p:inputText value="#{controlBean.devi.idDevice}"/>
+                        <h:outputText value="Ip"/>
+                        <p:inputText value="#{controlBean.devi.ip}"/>
+                        <h:outputText value="Location"/>
+                        <p:inputText value="#{controlBean.devi.location}"/>
+                        <h:outputText value="Connection"/>
+                        <p:inputText value="#{controlBean.devi.conn}" type="number"/>
+                    </p:panelGrid>
+                <p:commandButton value="Editar" oncomplete="PF('edit').hide()" actionListener="#{controlBean.edit()}" onclick="welcome?faces-redirect=true"/>
+            </p:dialog>
             <style type="text/css">
                 .ui-diagram-element {   
                     width:5em; 
