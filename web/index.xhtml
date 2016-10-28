@@ -7,20 +7,31 @@
     <h:head>
         <title>Bienvenido</title>
     </h:head>
-    <h:body>
+    <h:body style="height: 100%;width: 100%;background-image: url('images/networking.jpg')">
+        <h1 align="center"><b>Web Applications Networking Project</b></h1>
+        <br></br>
+        
+        
         <h:form id="mainform">
-            <p:growl id="growl" life="2000" />
-            <p:panelGrid columns="2">
-                <h:outputText value="Usuario"/>
-                <p:inputText value="#{loginBean.usuario}"/>
-                <h:outputText value="Password"/>
-                <p:password value="#{loginBean.pass}"/>
-            </p:panelGrid>
-            <p:commandButton value="Ingresar" action="#{loginBean.login()}" update="growl" style="width: 125px;height: 30px;" id="login"/>
-        </h:form>
-        <h:form>
-            <p:commandButton value="Registrarse" onclick="PF('register').show()" style="width: 125px; height: 30px;"/>
-        </h:form>
+            <p:growl id="growl" life="2000"/>
+            <table style="width: 350px;padding: 5px" align="center">
+                <tr colspan="2">
+                    <h2 align="center">Iniciar Sesion</h2>
+                </tr>
+                <tr>
+                    <td><b></b><h:outputText value="Usuario"/><b></b></td><td><p:inputText value="#{loginBean.usuario}"/></td>
+                </tr>
+                <tr>
+                    <td><h:outputText value="Password"/></td><td><p:password value="#{loginBean.pass}"/></td>
+                </tr>
+                <tr>
+                    <td><p:commandButton value="Ingresar" action="#{loginBean.login()}" update="growl" id="login" style="width: 100%;background-color: #007FFD"/></td>
+                    <td><p:commandButton value="Registrarse" onclick="PF('register').show()" style="width:100%"/></td>
+                </tr>
+            </table>
+            </h:form>
+        
+        
         
         <h:form>
             <p:dialog header="Registrarse" widgetVar="register" modal="true" showEffect="fade" hideEffect="fade" resizable="false">

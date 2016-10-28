@@ -18,12 +18,23 @@ import org.primefaces.model.mindmap.MindmapNode;
 @ManagedBean(name = "welcomeBean")
 public class welcomeBean implements Serializable{
 
-    private MindmapNode model = new DefaultMindmapNode("Network","Network","FFCC00",true);;
+    private MindmapNode model = new DefaultMindmapNode("Network","Network","FFCC00",false);
+    
     private List<Device> device = new ArrayList();
     private MindmapNode selectedNode;
+    private String location;
+    private MindmapNode node;
     
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+       
     @PostConstruct
-    public void init() { 
+    public void init() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProyectoPU");
         DeviceJpaController dev = new DeviceJpaController(emf);
         device = dev.findDeviceEntities();
@@ -33,6 +44,7 @@ public class welcomeBean implements Serializable{
             Integer id = device.get(i).getIdDevice();
             Integer type = device.get(i).getType();
             Integer conn = device.get(i).getConn();
+            String ip = device.get(i).getIp();
             
             if(null != type)switch (type) {
                 case 1:
@@ -45,37 +57,42 @@ public class welcomeBean implements Serializable{
                     taip = "Firewall";
                     break;
                 case 4:
-                    taip = "LoalBal";
+                    taip = "LoadBal";
                     break;
                 default:
                     taip = "Server";
                     break;
             }
-            MindmapNode x = new DefaultMindmapNode(taip+" "+id,id,"0055FF",true);
+            String details = "Id = "+id+"  ,Type = "+taip+" ,Ip = "+ip;
+            MindmapNode x = new DefaultMindmapNode(taip+" "+id,details,"0055FF",true);
             if(conn == 0){
                 model.addNode(x);
             }
         }
+       
     }     
     
     public void onNodeSelect(SelectEvent event) {
-        MindmapNode node = (MindmapNode) event.getObject();
+        selectedNode = (MindmapNode) event.getObject();
          
         //populate if not already loaded
-        if(node.getChildren().isEmpty()) {
-            
-            Integer idn = (Integer) node.getData();
-            System.out.print(idn);
+        if(selectedNode.getChildren().isEmpty()) {
+            List<Device> list = null;
+            String idn = (String)selectedNode.getData();
+            String idnn = idn.substring(5,7);
+            Integer idnnn = Integer.parseInt(idnn.replace(" ", ""));
+            System.out.print(idnnn); 
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProyectoPU");
             EntityManager em = emf.createEntityManager();
-            List<Device> list = em.createNamedQuery("Device.findByConn").setParameter("conn", idn).getResultList();
+            list = em.createNamedQuery("Device.findByConn").setParameter("conn", idnnn).getResultList();
             String taip = "";
             
                 for(Integer g=0;g<list.size();g++){
                     Integer conn = list.get(g).getConn();
                     Integer id = list.get(g).getIdDevice();
                     Integer type = list.get(g).getType();
-
+                    String ip = list.get(g).getIp();
+                    
                     if(null != type)switch (type) {
                         case 1:
                             taip = "Router";
@@ -93,9 +110,9 @@ public class welcomeBean implements Serializable{
                             taip = "Server";
                             break;
                     }
-                    
-                        MindmapNode x = new DefaultMindmapNode(taip+" "+id,id,"0055FF",true);
-                        node.addNode(x);
+                        String details = "Id = "+id+"  ,Type = "+taip+" ,Ip = "+ip;
+                        MindmapNode x = new DefaultMindmapNode(taip+" "+id,details,"0055FF",true);
+                        selectedNode.addNode(x);
                     
             }
             
@@ -103,6 +120,10 @@ public class welcomeBean implements Serializable{
         }   
     }
     
+    public void mapa(){
+        
+    }
+  
     public MindmapNode getModel() {
         return model;
     }
@@ -125,7 +146,19 @@ public class welcomeBean implements Serializable{
     }
     
     public void onNodeDblselect(SelectEvent event) {
-        this.selectedNode = (MindmapNode) event.getObject();        
+        this.selectedNode = (MindmapNode) event.getObject();
+        String n = (String) selectedNode.getData();
+        String n2 = n.substring(5,7);
+        Integer n3 = Integer.parseInt(n2.replace(" ", ""));
+        System.out.println("ubicacion: "+n3);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProyectoPU");
+        EntityManager em = emf.createEntityManager();
+        //String b = locat.substring(5,7);
+        //Integer c = Integer.parseInt(b.replace(" ", ""));
+        Device de = em.createNamedQuery("Device.findByIdDevice", Device.class).setParameter("idDevice", n3).getSingleResult();
+        String loc = de.getLocation();
+        System.out.println("ubicacion: "+loc);
+        location = "https://maps.googleapis.com/maps/api/staticmap?center="+loc+"&zoom=12&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C"+loc+"&key=AIzaSyAoy9ahDapg64HeKRXyubPDw9IADOdmetQ";        
     }
 }
   

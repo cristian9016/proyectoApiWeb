@@ -25,9 +25,16 @@ public class LoginBean implements Serializable {
         try{
             Usuarios u = em.createNamedQuery("Usuarios.login", Usuarios.class).setParameter("username", usuario).setParameter("pass", pass).getSingleResult();
         if(u!=null){
+            String type = u.getType();
             HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             session.setAttribute("LOGGED", true);
-            return "welcome?faces-redirect=true";
+            if(type.equals("admin")){
+                return "welcome?faces-redirect=true";
+            }else{
+                return "welcome-user?faces-redirect=true";
+            }
+            
+            
         }else{
             FacesContext context = FacesContext.getCurrentInstance(); 
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuario o Contraseña Incorrectos",null));

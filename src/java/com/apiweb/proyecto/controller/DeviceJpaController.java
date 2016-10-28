@@ -51,7 +51,7 @@ public class DeviceJpaController implements Serializable {
         }
     }
 
-    public void edit(Device device) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void edit(Device device) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();

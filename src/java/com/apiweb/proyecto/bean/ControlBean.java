@@ -10,6 +10,8 @@ import com.apiweb.proyecto.entities.Device;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -19,9 +21,10 @@ import javax.persistence.Persistence;
 public class ControlBean implements Serializable {
     
     private Integer delete;
-    
     private Device device = new Device();
     private Device devi = new Device();
+ 
+
 
     public Device getDevi() {
         return devi;
@@ -54,6 +57,7 @@ public class ControlBean implements Serializable {
 
     
     public void create(){
+    
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProyectoPU");
     DeviceJpaController djc1 = new DeviceJpaController(emf);
     try{
@@ -70,7 +74,7 @@ public class ControlBean implements Serializable {
         djc2.edit(devi);
     }catch(Exception e){
         
-    }   
+    }
     }
     
     public void delete(){
@@ -82,5 +86,7 @@ public class ControlBean implements Serializable {
         
     }
     }
+    
+    
     
 }
